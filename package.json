@@ -1,0 +1,9 @@
+{
+  "name": "MyApp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "swa start ./src/MyApp.Client --api-location ./src/MyApp.Functions"
+  }
+}
