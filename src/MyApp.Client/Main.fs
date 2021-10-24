@@ -139,85 +139,9 @@ let update remote message model =
 /// Connects the routing system to the Elmish application.
 let router = Router.infer SetPage (fun model -> model.page)
 
-type Main = Template<"wwwroot/main.html">
-
-let homePage model dispatch =
-    Main.Home().Elt()
-
-let counterPage model dispatch =
-    Main.Counter()
-        .Decrement(fun _ -> dispatch Decrement)
-        .Increment(fun _ -> dispatch Increment)
-        .Value(model.counter, fun v -> dispatch (SetCounter v))
-        .Elt()
-
-let dataPage model (username: string) dispatch =
-    Main.Data()
-        .Reload(fun _ -> dispatch GetBooks)
-        .Username(username)
-        .SignOut(fun _ -> dispatch SendSignOut)
-        .Rows(cond model.books <| function
-            | None ->
-                Main.EmptyData().Elt()
-            | Some books ->
-                forEach books <| fun book ->
-                    tr [] [
-                        td [] [text book.title]
-                        td [] [text book.author]
-                        td [] [text (book.publishDate.ToString("yyyy-MM-dd"))]
-                        td [] [text book.isbn]
-                    ])
-        .Elt()
-
-let signInPage model dispatch =
-    Main.SignIn()
-        .Username(model.username, fun s -> dispatch (SetUsername s))
-        .Password(model.password, fun s -> dispatch (SetPassword s))
-        .SignIn(fun _ -> dispatch SendSignIn)
-        .ErrorNotification(
-            cond model.signInFailed <| function
-            | false -> empty
-            | true ->
-                Main.ErrorNotification()
-                    .HideClass("is-hidden")
-                    .Text("Sign in failed. Use any username and the password \"password\".")
-                    .Elt()
-        )
-        .Elt()
-
-let menuItem (model: Model) (page: Page) (text: string) =
-    Main.MenuItem()
-        .Active(if model.page = page then "is-active" else "")
-        .Url(router.Link page)
-        .Text(text)
-        .Elt()
 
 let view model dispatch =
-    Main()
-        .Menu(concat [
-            menuItem model Home "Home"
-            menuItem model Counter "Counter"
-            menuItem model Data "Download data"
-        ])
-        .Body(
-            cond model.page <| function
-            | Home -> homePage model dispatch
-            | Counter -> counterPage model dispatch
-            | Data ->
-                cond model.signedInAs <| function
-                | Some username -> dataPage model username dispatch
-                | None -> signInPage model dispatch
-        )
-        .Error(
-            cond model.error <| function
-            | None -> empty
-            | Some err ->
-                Main.ErrorNotification()
-                    .Text(err)
-                    .Hide(fun _ -> dispatch ClearError)
-                    .Elt()
-        )
-        .Elt()
+    div [] [ text "Hello from Bolero!" ]
 
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
