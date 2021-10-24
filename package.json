@@ -6,4 +6,8 @@
   "scripts": {
     "dev": "swa start ./src/MyApp.Client --api-location ./src/MyApp.Functions"
   }
+  "devDependencies" : {
+    "@azure/static-web-apps-cli": "^0.8.0",
+    "azure-functions-core-tools": "^4.0.3780",
+  }
 }
